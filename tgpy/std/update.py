@@ -26,7 +26,10 @@ def update():
         try:
             run_cmd(update_args)
         except RunCmdException:
-            run_cmd(update_args + ['--user'])
+            if sys.platform == 'linux' and 'alpine' in sys.version.lower():
+                run_cmd(update_args + ['--break-system-packages'])
+            else:
+                run_cmd(update_args + ['--user'])
     elif REPO_ROOT:
         with execute_in_repo_root():
             try:
